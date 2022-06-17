@@ -3,9 +3,6 @@ version: "3.8"
 networks:
   ros:
     driver: bridge
-    ipam:
-      config:
-        - subnet: 172.20.0.0/24
 
 services:
   ros-master:
