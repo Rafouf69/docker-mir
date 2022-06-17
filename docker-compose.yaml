@@ -1,0 +1,33 @@
+version: "3.8"
+
+networks:
+  ros:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+
+services:
+  ros-master:
+    image: rvig69100/ros-mir250
+    networks:
+      - ros
+    restart: always
+    command: bin/bash -c "source /opt/ros/noetic/setup.bash && roscore"
+
+  gzweb:
+    image: rvig69100/gzweb_2
+    depends_on:
+      - ros-master
+    environment:
+      - "ROS_MASTER_URI=http://ros-master:11311"
+      - "ROS_HOSTNAME=gazebo"
+      - "XAUTHORITYS"
+    ports:
+     - "8080:8080"
+     - "7681:7681"
+    command: bin/bash -c "source ~./bashrc"
+    networks:
+      - ros
+    restart: always
+    tty: true
